@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ForgeKit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <h1>ForgeKit</h1>
+  <p>Tell us what you're trying to build.</p>
+
+  <textarea id="idea" placeholder="Example: Make an enemy that follows the player..."></textarea>
+  <br><br>
+
+  <button onclick="generate()">Help me build it</button>
+
+  <div id="result"></div>
+
+  <script>
+    function generate() {
+      const idea = document.getElementById("idea").value;
+      const result = document.getElementById("result");
+
+      if (!idea.trim()) {
+        result.innerHTML = "<p>Tell me what you want to build first!</p>";
+        return;
+      }
+
+      result.innerHTML =
+        "<h2>ForgeKit's plan</h2>" +
+        "<p>You want to build:</p>" +
+        "<p><b>" + idea + "</b></p>" +
+        "<p>Step 1: Choose your game engine.</p>" +
+        "<p>Step 2: Break the idea into small mechanics.</p>" +
+        "<p>Step 3: Build and test each mechanic.</p>";
+    }
+  </script>
+</body>
+</html>
