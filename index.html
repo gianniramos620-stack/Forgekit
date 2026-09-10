@@ -1,96 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ForgeKit — Game Growth AI</title>
+  <title>ForgeKit - Game Growth AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #111318;
+      background: #0f1117;
       color: white;
     }
 
     .container {
-      max-width: 800px;
+      max-width: 850px;
       margin: auto;
       padding: 30px 20px;
     }
 
-    h1 {
+    .logo {
       font-size: 42px;
+      font-weight: bold;
       margin-bottom: 5px;
     }
 
     .tagline {
-      color: #aaa;
+      color: #9da3b4;
       font-size: 18px;
       margin-bottom: 30px;
     }
 
     .card {
-      background: #1b1e26;
-      border: 1px solid #303440;
+      background: #191d26;
+      border: 1px solid #303642;
       border-radius: 14px;
-      padding: 20px;
+      padding: 22px;
       margin-bottom: 20px;
     }
 
-    input, textarea {
+    h2 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 6px;
+      color: #c8ccd7;
+    }
+
+    input,
+    textarea {
       width: 100%;
-      box-sizing: border-box;
-      margin-top: 8px;
-      margin-bottom: 15px;
-      padding: 12px;
+      padding: 13px;
       border-radius: 8px;
-      border: 1px solid #444;
-      background: #101217;
+      border: 1px solid #3a404d;
+      background: #0d0f14;
       color: white;
       font-size: 16px;
     }
 
     textarea {
-      min-height: 110px;
+      min-height: 120px;
       resize: vertical;
     }
 
     button {
       width: 100%;
-      padding: 14px;
+      margin-top: 20px;
+      padding: 15px;
       border: 0;
       border-radius: 9px;
       background: #6c63ff;
       color: white;
       font-size: 17px;
       font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #8179ff;
     }
 
     .result {
       display: none;
     }
 
-    .score {
-      font-size: 38px;
-      font-weight: bold;
-    }
-
     .finding {
-      padding: 15px;
-      background: #14171d;
+      background: #11141b;
       border-radius: 9px;
+      padding: 15px;
       margin-top: 12px;
     }
 
     .label {
-      color: #999;
-      font-size: 13px;
+      color: #8f96a8;
+      font-size: 12px;
       text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .score {
+      font-size: 42px;
+      font-weight: bold;
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -99,12 +111,14 @@
 
 <div class="container">
 
-  <h1>ForgeKit</h1>
+  <div class="logo">ForgeKit</div>
+
   <div class="tagline">
-    AI-powered game growth analysis.
+    Turn game data into your next best move.
   </div>
 
   <div class="card">
+
     <h2>Analyze your game</h2>
 
     <label>Game name</label>
@@ -116,25 +130,27 @@
     <label>Favorites / wishlists</label>
     <input id="favorites" type="number" placeholder="4">
 
-    <label>Loves / likes</label>
+    <label>Likes / loves</label>
     <input id="likes" type="number" placeholder="5">
 
     <label>Comments</label>
     <input id="comments" type="number" placeholder="7">
 
-    <label>Tell ForgeKit about your game</label>
+    <label>Describe your game</label>
     <textarea id="description"
-      placeholder="Describe your game, its main gameplay loop, and what you want to improve."></textarea>
+      placeholder="What is your game about? What do players do?"></textarea>
 
     <button onclick="analyze()">Analyze my game</button>
+
   </div>
 
   <div class="card result" id="result">
 
-    <div class="label">ForgeKit Game Health Score</div>
+    <div class="label">Game Health Score</div>
+
     <div class="score" id="score">--</div>
 
-    <h2>🔎 Biggest finding</h2>
+    <h2>Biggest finding</h2>
 
     <div class="finding">
       <div class="label">Diagnosis</div>
@@ -158,9 +174,7 @@
 
   </div>
 
-</div>
-
-<script>
+</div><script>
 
 function analyze() {
 
@@ -187,11 +201,17 @@ function analyze() {
 
   let score = 50;
 
-  if (engagement > 20) score += 25;
-  else if (engagement > 10) score += 15;
-  else if (engagement > 5) score += 5;
+  if (engagement >= 20) {
+    score += 30;
+  } else if (engagement >= 10) {
+    score += 20;
+  } else if (engagement >= 5) {
+    score += 10;
+  }
 
-  if (views < 100) score -= 5;
+  if (views < 100) {
+    score -= 5;
+  }
 
   score = Math.max(0, Math.min(100, score));
 
@@ -201,17 +221,19 @@ function analyze() {
   if (views < 100 && engagement >= 20) {
 
     document.getElementById("diagnosis").textContent =
-      "Your biggest potential problem is discovery, not engagement.";
+      "Your game may have a discovery problem.";
 
     document.getElementById("evidence").textContent =
-      game + " has relatively strong interaction compared with its current reach. " +
-      "That suggests the people who find the game may be interested, but not enough people are finding it.";
+      game + " has strong interaction compared with its current reach. " +
+      "That suggests the people who find the game may be interested, " +
+      "but the game is not reaching enough people yet.";
 
     document.getElementById("experiment").textContent =
-      "Test a new thumbnail and project-page hook that communicates the core gameplay immediately.";
+      "Test a new thumbnail, title, or project-page hook that communicates " +
+      "the core gameplay immediately.";
 
     document.getElementById("metric").textContent =
-      "Compare project views → actual game plays over the next test period.";
+      "Compare views-to-plays conversion before and after the change.";
 
   } else {
 
@@ -222,7 +244,7 @@ function analyze() {
       "The current sample is too small or the engagement pattern is unclear.";
 
     document.getElementById("experiment").textContent =
-      "Collect more player and engagement data, then test one change at a time.";
+      "Collect more data and test one major change at a time.";
 
     document.getElementById("metric").textContent =
       "Track plays, retention, and engagement before and after each experiment.";
