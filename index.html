@@ -1,39 +1,237 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ForgeKit</title>
+  <title>ForgeKit — Game Growth AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111318;
+      color: white;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 5px;
+    }
+
+    .tagline {
+      color: #aaa;
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #1b1e26;
+      border: 1px solid #303440;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    input, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 8px;
+      margin-bottom: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #101217;
+      color: white;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 9px;
+      background: #6c63ff;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #8179ff;
+    }
+
+    .result {
+      display: none;
+    }
+
+    .score {
+      font-size: 38px;
+      font-weight: bold;
+    }
+
+    .finding {
+      padding: 15px;
+      background: #14171d;
+      border-radius: 9px;
+      margin-top: 12px;
+    }
+
+    .label {
+      color: #999;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+  </style>
 </head>
 
 <body>
+
+<div class="container">
+
   <h1>ForgeKit</h1>
-  <p>Tell us what you're trying to build.</p>
+  <div class="tagline">
+    AI-powered game growth analysis.
+  </div>
 
-  <textarea id="idea" placeholder="Example: Make an enemy that follows the player..."></textarea>
-  <br><br>
+  <div class="card">
+    <h2>Analyze your game</h2>
 
-  <button onclick="generate()">Help me build it</button>
+    <label>Game name</label>
+    <input id="game" placeholder="Example: Parrystreak REBORN">
 
-  <div id="result"></div>
+    <label>Views / players</label>
+    <input id="views" type="number" placeholder="27">
 
-  <script>
-    function generate() {
-      const idea = document.getElementById("idea").value;
-      const result = document.getElementById("result");
+    <label>Favorites / wishlists</label>
+    <input id="favorites" type="number" placeholder="4">
 
-      if (!idea.trim()) {
-        result.innerHTML = "<p>Tell me what you want to build first!</p>";
-        return;
-      }
+    <label>Loves / likes</label>
+    <input id="likes" type="number" placeholder="5">
 
-      result.innerHTML =
-        "<h2>ForgeKit's plan</h2>" +
-        "<p>You want to build:</p>" +
-        "<p><b>" + idea + "</b></p>" +
-        "<p>Step 1: Choose your game engine.</p>" +
-        "<p>Step 2: Break the idea into small mechanics.</p>" +
-        "<p>Step 3: Build and test each mechanic.</p>";
-    }
-  </script>
+    <label>Comments</label>
+    <input id="comments" type="number" placeholder="7">
+
+    <label>Tell ForgeKit about your game</label>
+    <textarea id="description"
+      placeholder="Describe your game, its main gameplay loop, and what you want to improve."></textarea>
+
+    <button onclick="analyze()">Analyze my game</button>
+  </div>
+
+  <div class="card result" id="result">
+
+    <div class="label">ForgeKit Game Health Score</div>
+    <div class="score" id="score">--</div>
+
+    <h2>🔎 Biggest finding</h2>
+
+    <div class="finding">
+      <div class="label">Diagnosis</div>
+      <p id="diagnosis"></p>
+    </div>
+
+    <div class="finding">
+      <div class="label">Evidence</div>
+      <p id="evidence"></p>
+    </div>
+
+    <div class="finding">
+      <div class="label">Recommended experiment</div>
+      <p id="experiment"></p>
+    </div>
+
+    <div class="finding">
+      <div class="label">Success metric</div>
+      <p id="metric"></p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+function analyze() {
+
+  const game = document.getElementById("game").value || "Your game";
+
+  const views =
+    Number(document.getElementById("views").value) || 0;
+
+  const favorites =
+    Number(document.getElementById("favorites").value) || 0;
+
+  const likes =
+    Number(document.getElementById("likes").value) || 0;
+
+  const comments =
+    Number(document.getElementById("comments").value) || 0;
+
+  let engagement = 0;
+
+  if (views > 0) {
+    engagement =
+      ((favorites + likes + comments) / views) * 100;
+  }
+
+  let score = 50;
+
+  if (engagement > 20) score += 25;
+  else if (engagement > 10) score += 15;
+  else if (engagement > 5) score += 5;
+
+  if (views < 100) score -= 5;
+
+  score = Math.max(0, Math.min(100, score));
+
+  document.getElementById("score").textContent =
+    score + "/100";
+
+  if (views < 100 && engagement >= 20) {
+
+    document.getElementById("diagnosis").textContent =
+      "Your biggest potential problem is discovery, not engagement.";
+
+    document.getElementById("evidence").textContent =
+      game + " has relatively strong interaction compared with its current reach. " +
+      "That suggests the people who find the game may be interested, but not enough people are finding it.";
+
+    document.getElementById("experiment").textContent =
+      "Test a new thumbnail and project-page hook that communicates the core gameplay immediately.";
+
+    document.getElementById("metric").textContent =
+      "Compare project views → actual game plays over the next test period.";
+
+  } else {
+
+    document.getElementById("diagnosis").textContent =
+      "ForgeKit needs more data before making a confident diagnosis.";
+
+    document.getElementById("evidence").textContent =
+      "The current sample is too small or the engagement pattern is unclear.";
+
+    document.getElementById("experiment").textContent =
+      "Collect more player and engagement data, then test one change at a time.";
+
+    document.getElementById("metric").textContent =
+      "Track plays, retention, and engagement before and after each experiment.";
+  }
+
+  document.getElementById("result").style.display = "block";
+}
+
+</script>
+
 </body>
 </html>
